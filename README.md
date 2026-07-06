@@ -25,6 +25,12 @@
 
 直接開啟 `index.html`，再選擇日本或韓國頁面。
 
+已部署網址：
+
+- 首頁: https://poyhsu.github.io/Finance_Japan_Korea/
+- 日本: https://poyhsu.github.io/Finance_Japan_Korea/japan.html
+- 韓國: https://poyhsu.github.io/Finance_Japan_Korea/korea.html
+
 資料會儲存在目前瀏覽器的 `localStorage`。這適合長期保存於同一台手機或電腦，但不等於雲端同步。建議旅行中定期匯出 JSON 備份。
 
 ## 免費雲端部署建議
