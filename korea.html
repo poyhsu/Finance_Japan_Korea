@@ -25,6 +25,11 @@
       </nav>
 
       <div class="header-actions" aria-label="資料操作">
+        <div class="cloud-auth">
+          <span class="cloud-pill" id="cloud-status">雲端未連線</span>
+          <button class="ghost-button" id="sign-in" type="button">Google 登入</button>
+          <button class="ghost-button" id="sign-out" type="button" hidden>登出</button>
+        </div>
         <button class="ghost-button" id="install-app" type="button" hidden>安裝</button>
         <button class="icon-button wide" id="export-json" type="button" title="匯出完整 JSON 備份">
           <span aria-hidden="true">↓</span>
@@ -187,6 +192,6 @@
       </section>
     </main>
 
-    <script src="app.js" defer></script>
+    <script src="app.js" type="module"></script>
   </body>
 </html>
