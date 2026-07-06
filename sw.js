@@ -1,4 +1,4 @@
-const CACHE_NAME = "travel-expense-jp-kr-v2";
+const CACHE_NAME = "travel-expense-jp-kr-v3";
 const ASSETS = [
   "./",
   "./index.html",
