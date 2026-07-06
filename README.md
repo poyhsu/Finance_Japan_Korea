@@ -17,6 +17,8 @@
 - 日本頁使用日幣 JPY，韓國頁使用韓幣 KRW
 - 自動計算誰應收、誰應付、誰該付誰
 - 可設定台幣估算匯率
+- Firebase Firestore 雲端同步
+- Google 登入控管雲端資料寫入
 - JSON 完整備份與匯入
 - CSV 匯出目前頁面的支出
 - PWA 離線快取
@@ -31,7 +33,41 @@
 - 日本: https://poyhsu.github.io/Finance_Japan_Korea/japan.html
 - 韓國: https://poyhsu.github.io/Finance_Japan_Korea/korea.html
 
-資料會儲存在目前瀏覽器的 `localStorage`。這適合長期保存於同一台手機或電腦，但不等於雲端同步。建議旅行中定期匯出 JSON 備份。
+登入 Google 後，資料會同步到 Firebase Firestore。`localStorage` 只作為本機備份；雲端資料才是跨裝置同步來源。建議旅行中仍定期匯出 JSON 備份。
+
+## Firebase 設定
+
+到 Firebase Console 完成以下設定：
+
+1. Authentication > Sign-in method > 啟用 Google。
+2. Authentication > Settings > Authorized domains > 加入 `poyhsu.github.io`。
+3. Firestore Database > 建立資料庫。
+4. Firestore Rules 設為只允許指定 Google 帳號讀寫。
+
+請把 `YOUR_GMAIL@gmail.com` 換成你自己的 Gmail；如果有旅伴要一起記帳，可以在清單中加入多個 email。
+
+```js
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAllowedUser() {
+      return request.auth != null
+        && request.auth.token.email in [
+          'YOUR_GMAIL@gmail.com'
+        ];
+    }
+
+    match /travelLedgers/financeJapanKorea {
+      allow read, write: if isAllowedUser();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+```
 
 ## 免費雲端部署建議
 
