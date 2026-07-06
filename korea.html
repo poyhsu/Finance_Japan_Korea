@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0f766e" />
+    <title>2026 韓國支出</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-trip="korea">
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">韓</div>
+        <div>
+          <h1 id="page-title">2026 韓國支出</h1>
+          <p id="storage-status">準備中</p>
+        </div>
+      </div>
+
+      <nav class="trip-nav" aria-label="旅行頁面">
+        <a href="japan.html" data-trip-link="japan">日本</a>
+        <a href="korea.html" data-trip-link="korea">韓國</a>
+      </nav>
+
+      <div class="header-actions" aria-label="資料操作">
+        <button class="ghost-button" id="install-app" type="button" hidden>安裝</button>
+        <button class="icon-button wide" id="export-json" type="button" title="匯出完整 JSON 備份">
+          <span aria-hidden="true">↓</span>
+          <span>JSON</span>
+        </button>
+        <button class="icon-button wide" id="export-csv" type="button" title="匯出本頁 CSV">
+          <span aria-hidden="true">↓</span>
+          <span>CSV</span>
+        </button>
+        <label class="icon-button wide file-button" title="匯入 JSON 備份">
+          <span aria-hidden="true">↑</span>
+          <span>JSON</span>
+          <input id="import-file" type="file" accept="application/json,.json" />
+        </label>
+      </div>
+    </header>
+
+    <main class="app-shell">
+      <aside class="side-panel">
+        <section class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">成員</p>
+              <h2>人員</h2>
+            </div>
+            <span class="count-pill" id="people-count">0</span>
+          </div>
+
+          <form class="inline-form" id="person-form">
+            <label class="sr-only" for="person-name">人員名稱</label>
+            <input id="person-name" type="text" autocomplete="off" placeholder="新增人員" maxlength="24" />
+            <button class="primary-button square" type="submit" title="新增人員">
+              <span aria-hidden="true">+</span>
+            </button>
+          </form>
+
+          <ul class="people-list" id="people-list"></ul>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">估算</p>
+              <h2>台幣匯率</h2>
+            </div>
+          </div>
+
+          <label class="field">
+            <span>韓幣</span>
+            <input id="rate-current" type="number" min="0" step="0.0001" inputmode="decimal" placeholder="TWD / KRW" />
+          </label>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">篩選</p>
+              <h2>本頁搜尋</h2>
+            </div>
+          </div>
+
+          <label class="field">
+            <span>搜尋</span>
+            <input id="expense-search" type="search" autocomplete="off" placeholder="名稱、備註、人員" />
+          </label>
+        </section>
+      </aside>
+
+      <section class="workspace">
+        <section class="summary-grid" id="summary-grid" aria-label="支出摘要"></section>
+
+        <section class="panel expense-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">記帳</p>
+              <h2 id="expense-form-title">新增韓國支出</h2>
+            </div>
+            <button class="ghost-button" id="cancel-edit" type="button" hidden>取消編輯</button>
+          </div>
+
+          <form id="expense-form" class="expense-form">
+            <div class="form-grid">
+              <label class="field">
+                <span>日期</span>
+                <input id="expense-date" type="date" required />
+              </label>
+
+              <label class="field span-2">
+                <span>名稱</span>
+                <input id="expense-title" type="text" maxlength="60" autocomplete="off" placeholder="餐費、交通、住宿" required />
+              </label>
+
+              <label class="field">
+                <span>幣別</span>
+                <input id="expense-currency-label" type="text" value="韓幣 KRW" readonly />
+              </label>
+
+              <label class="field">
+                <span>金額</span>
+                <input id="expense-amount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0" required />
+              </label>
+
+              <label class="field">
+                <span>誰支出的</span>
+                <select id="expense-paid-by" required></select>
+              </label>
+
+              <label class="field span-2">
+                <span>備註</span>
+                <input id="expense-note" type="text" maxlength="100" autocomplete="off" placeholder="選填" />
+              </label>
+            </div>
+
+            <div class="split-block">
+              <div class="split-toolbar">
+                <div>
+                  <p class="eyebrow">分攤</p>
+                  <h3>誰要平分費用</h3>
+                </div>
+                <div class="button-row">
+                  <button class="icon-button" id="select-all-participants" type="button" title="全選">
+                    <span aria-hidden="true">✓</span>
+                  </button>
+                  <button class="icon-button" id="clear-participants" type="button" title="清空">
+                    <span aria-hidden="true">×</span>
+                  </button>
+                </div>
+              </div>
+              <div class="participants-list" id="participants-list"></div>
+            </div>
+
+            <p class="form-message" id="form-message" role="alert"></p>
+
+            <div class="form-actions">
+              <button class="primary-button" id="expense-submit" type="submit">新增韓國支出</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">結算</p>
+              <h2>韓國誰該付誰</h2>
+            </div>
+          </div>
+          <div class="settlement-list" id="settlement-list"></div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">明細</p>
+              <h2>韓國支出紀錄</h2>
+            </div>
+          </div>
+          <div class="expenses-list" id="expenses-list"></div>
+          <p class="empty-state" id="empty-expenses" hidden>尚無韓國支出紀錄</p>
+        </section>
+      </section>
+    </main>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
