@@ -105,6 +105,34 @@ button {
   flex-wrap: wrap;
 }
 
+.cloud-auth {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 4px;
+  background: var(--surface-muted);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.cloud-pill {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  max-width: 240px;
+  padding: 0 10px;
+  color: var(--accent-strong);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 900;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .trip-nav {
   display: inline-flex;
   align-items: center;
@@ -325,6 +353,13 @@ input:focus,
 select:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.16);
+}
+
+input:disabled,
+select:disabled,
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
 }
 
 input[readonly] {
@@ -759,6 +794,16 @@ input[readonly] {
   .header-actions {
     width: 100%;
     justify-content: flex-start;
+  }
+
+  .cloud-auth {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .cloud-pill {
+    flex: 1 1 180px;
+    max-width: none;
   }
 
   .trip-nav {
